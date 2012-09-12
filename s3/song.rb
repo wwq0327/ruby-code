@@ -17,6 +17,10 @@ class KaraokeSong < Song
     super(name, artist, duration)
     @lyrics = lyrics
   end
+
+  def to_s
+    super + " [#@lyrics]"
+  end
 end
 
 if __FILE__ == $0
