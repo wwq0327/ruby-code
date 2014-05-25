@@ -1,30 +1,5 @@
 require "test/unit"
-
-def create_dir(dir_name)
-  path = []
-  dir_name.split("/").each {|dir|
-    path << dir
-    dir_path = path.join "/"
-    Dir.mkdir dir_path unless Dir.exists? dir_path
-  }
-end
-
-
-def get_dir(file_path)
-  arr = file_path.split "/"
-  arr.pop
-  arr.join("/")
-end
-
-def create_file(file_path, content)
-  dir_path = get_dir(file_path)
-  create_dir dir_path unless Dir.exists?dir_path
-
-  File.open(file_path, "w") { |file|
-    file.write(content)
-  }
-end
-
+require "./blog"
 
 class BlogTest < Test::Unit::TestCase
   def test_create_dir
@@ -57,22 +32,5 @@ class BlogTest < Test::Unit::TestCase
   def teardown
     blog_dir = "test_blog"
     clear_dir blog_dir
-  end
-
-  def clear_dir(dir_path)
-    return unless Dir.exists? dir_path
-    
-    files = Dir.entries(dir_path) - [".", ".."]
-    if files.length > 0
-      files.each { |file|
-        path = File.join dir_path, file
-        if Dir.exists?(path)
-          clear_dir(path)
-        else
-          File.delete path
-        end
-      }
-    end
-    Dir.delete dir_path
   end
 end
