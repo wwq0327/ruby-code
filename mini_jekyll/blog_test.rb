@@ -60,19 +60,19 @@ class BlogTest < Test::Unit::TestCase
   end
 
   def clear_dir(dir_path)
-    return unless Dir.exist? dir_path
+    return unless Dir.exists? dir_path
     
-    files = Dir.entries(dir) - [".", ".."]
+    files = Dir.entries(dir_path) - [".", ".."]
     if files.length > 0
       files.each { |file|
-        path = File.join dir, file
-        if Dir.exist?(path)
-          clear_dir path
+        path = File.join dir_path, file
+        if Dir.exists?(path)
+          clear_dir(path)
         else
           File.delete path
         end
       }
     end
-    File.delete dir_path
+    Dir.delete dir_path
   end
 end
