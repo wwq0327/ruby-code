@@ -61,8 +61,16 @@ class BlogTest < Test::Unit::TestCase
 
   def test_md_to_html
     md_content = "#content"
-    html_content = "<h1>content</h1>"
+    html_content = "<h1>content</h1>\n"
     assert_equal html_content, md_to_html(md_content)
+  end
+
+  def test_render
+    layout_content = "<p>{{content}}</p>"
+    blog_content = "hello, world"
+    html_content = "<p>hello, world</p>"
+    result = render(layout_content, blog_content)
+    assert_equal html_content, result
   end
 
   def teardown

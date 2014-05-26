@@ -1,3 +1,6 @@
+require "rdiscount"
+require "liquid"
+
 def create_dir(dir_name)
   path = []
   dir_name.split("/").each {|dir|
@@ -68,7 +71,7 @@ def get_default_layout_content(*args)
     File.open(args[0]).readlines.join
   else
     content = []
-    content << "<html><head><meta charset='utf-8'/><title>my_blog</title></head><body>"
+    content << "<html><head><meta charset=\"utf-8\"/><title>my_blog</title></head><body>"
     content << "<h1>My Blog</h1><div id='content'>"
     content << "{{content}}"
     content << "</div></body></html>"
@@ -87,12 +90,24 @@ def get_mds(files)
 end
 
 def md_to_html(md_content)
-  md_content
+  RDiscount.new(md_content).to_html
 end
 
 def create(blog_name)
   create_dir blog_name
   create_default_layout blog_name, get_default_layout_content
+end
+
+# def render(layout_text, blog_text)
+#   #layout_regexp = /\{\{\s*(content)\s*\}\}/
+#   layout_regexp = %r|{{\s*(content)\s*}}|
+#   match = layout_text.match(layout_regexp)
+#   layout_text.sub(match.to_s, blog_text)
+# end
+
+def render(layout_text, blog_text)
+  template = Liquid::Template.parse(layout_text)
+  template.render("content" => blog_text)
 end
 
 if $0 == __FILE__
