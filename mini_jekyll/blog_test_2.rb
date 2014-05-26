@@ -9,6 +9,7 @@ class BlogTest < Test::Unit::TestCase
     @posts_dir = File.join @blog_dir, "_posts"
     @file_path = File.join @site_dir, "index.html"
     @default_layout = File.join @layouts_dir, "default.html"
+    @md_file = "test.md"
   end
 
   def test_create_dir
@@ -71,6 +72,28 @@ class BlogTest < Test::Unit::TestCase
     html_content = "<p>hello, world</p>"
     result = render(layout_content, blog_content)
     assert_equal html_content, result
+  end
+
+  def test_create_blog
+    create_file File.join(@posts_dir, @md_file), "#test"
+    create_blog @blog_dir, @md_file
+    blog_file = File.join File.join(@site_dir, @md_file.sub(".md", "")), "index.html"
+    assert File.exists?blog_file
+    assert File.open(blog_file).readlines.join.include?("<h1>test</h1>")
+  end
+  
+  def test_index_content
+    mds = ["a.md", "b.md"]
+    result = index_content(mds)
+    # blog_regexp = %r|<a\s+href=".+?/index.html">|
+    blog_regexp = /<a\s+href='.+?\/index.html'>/
+    arr = []
+    result.scan(blog_regexp) do |item|
+      # md_reg = %r|<a\s+href="(.+)/index.html"|
+      md_reg = /<a\s+href='(.+)\/index.html'>/
+      arr << "#{item.match(md_reg)[1]}.md"
+    end
+    assert_equal [], mds - arr
   end
 
   def teardown

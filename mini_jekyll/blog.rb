@@ -48,8 +48,8 @@ end
 
 def check_usage
   # 帮助说明
-  unless ARGV.length == 2 && 'create' == ARGV[0]
-    puts "Usage: `ruby blog.rb create app_name`"
+  unless ARGV.length == 2 && ['create', 'generate'].include?(ARGV[0])
+    puts "Usage: `ruby blog.rb create|generate app_name`"
     exit
   end
 end
@@ -115,11 +115,47 @@ def render(layout_text, blog_text)
   template.render("content" => blog_text)
 end
 
+def create_blog(blog_name, md)
+  md_path = File.join blog_name, "_posts/#{md}"
+  blog_path = File.join File.join(File.join(blog_name, '_site'), md.sub(".md", "")), "index.html"
+
+  md_text = File.open(md_path).readlines.join
+  html_content = md_to_html(md_text)
+  content = render get_default_layout_content, html_content
+
+  create_file blog_path, content
+end
+
+def index_content(md_files)
+    content = []
+    content << "<ul>"
+    md_files.each do |md_file|
+        blog_dir = md_file.sub '.md',''
+        content << "<li><a href='#{blog_dir}/index.html'>#{blog_dir}</a></li>"
+    end
+    content << "</ul>"
+    content.join
+end
+
+def generate(blog_name)
+  mds = []
+  posts_dir = File.join(blog_name, "_posts")
+  mds = Dir.entries(posts_dir) - ['.', '..'] if Dir.exists?posts_dir
+  mds.each do |md|
+    create_blog blog_name, md
+  end
+  content = render get_default_layout_content, index_content(mds)
+  index_path = File.join blog_name, '_site/index.hmtl'
+  create_file index_path, content
+end
+
 if $0 == __FILE__
   check_usage
   method = ARGV[0]
   blog_name = ARGV[1]
   if method == "create"
     create blog_name
+  elsif method == 'generate'
+    generate blog_name
   end
 end
