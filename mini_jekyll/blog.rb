@@ -2,6 +2,7 @@ require "rdiscount"
 require "liquid"
 
 def create_dir(dir_name)
+  # 创建目录
   path = []
   dir_name.split("/").each {|dir|
     path << dir
@@ -10,14 +11,15 @@ def create_dir(dir_name)
   }
 end
 
-
 def get_dir(file_path)
+  # 获取目录名
   arr = file_path.split "/"
   arr.pop
   arr.join("/")
 end
 
 def create_file(file_path, content)
+  # 创建一个新的文件，并写入指定内容
   dir_path = get_dir(file_path)
   create_dir dir_path unless Dir.exists?dir_path
 
@@ -27,6 +29,7 @@ def create_file(file_path, content)
 end
 
 def clear_dir(dir_path)
+  # 清理目录
   return unless Dir.exists? dir_path
   
   files = Dir.entries(dir_path) - [".", ".."]
@@ -44,6 +47,7 @@ def clear_dir(dir_path)
 end
 
 def check_usage
+  # 帮助说明
   unless ARGV.length == 2 && 'create' == ARGV[0]
     puts "Usage: `ruby blog.rb create app_name`"
     exit
@@ -51,6 +55,7 @@ def check_usage
 end
 
 def create_dirs(blog_name)
+  # 创建项目需要的目录结构
   blog_dir = blog_name
   layouts_dir = File.join blog_dir, "_posts"
   posts_dir = File.join blog_dir, "_posts"
