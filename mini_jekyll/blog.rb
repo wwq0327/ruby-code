@@ -34,14 +34,14 @@ def clear_dir(dir_path)
   
   files = Dir.entries(dir_path) - [".", ".."]
   if files.length > 0
-    files.each { |file|
+    files.each do |file|
       path = File.join dir_path, file
       if Dir.exists?(path)
         clear_dir(path)
       else
         File.delete path
       end
-    }
+    end
   end
   Dir.delete dir_path
 end
