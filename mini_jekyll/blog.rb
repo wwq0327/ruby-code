@@ -4,11 +4,11 @@ require "liquid"
 def create_dir(dir_name)
   # 创建目录
   path = []
-  dir_name.split("/").each {|dir|
+  dir_name.split("/").each do |dir|
     path << dir
     dir_path = path.join "/"
     Dir.mkdir dir_path unless Dir.exists? dir_path
-  }
+  end
 end
 
 def get_dir(file_path)
@@ -23,9 +23,9 @@ def create_file(file_path, content)
   dir_path = get_dir(file_path)
   create_dir dir_path unless Dir.exists?dir_path
 
-  File.open(file_path, "w") { |file|
+  File.open(file_path, "w") do |file|
     file.write(content)
-  }
+  end
 end
 
 def clear_dir(dir_path)
@@ -57,7 +57,7 @@ end
 def create_dirs(blog_name)
   # 创建项目需要的目录结构
   blog_dir = blog_name
-  layouts_dir = File.join blog_dir, "_posts"
+  layouts_dir = File.join blog_dir, "_layouts" # Bug
   posts_dir = File.join blog_dir, "_posts"
   [layouts_dir, posts_dir].each do |dir|
     create_dir dir
@@ -95,6 +95,7 @@ def get_mds(files)
 end
 
 def md_to_html(md_content)
+  # 内容转换成HTML格式
   RDiscount.new(md_content).to_html
 end
 
@@ -102,13 +103,6 @@ def create(blog_name)
   create_dir blog_name
   create_default_layout blog_name, get_default_layout_content
 end
-
-# def render(layout_text, blog_text)
-#   #layout_regexp = /\{\{\s*(content)\s*\}\}/
-#   layout_regexp = %r|{{\s*(content)\s*}}|
-#   match = layout_text.match(layout_regexp)
-#   layout_text.sub(match.to_s, blog_text)
-# end
 
 def render(layout_text, blog_text)
   template = Liquid::Template.parse(layout_text)
