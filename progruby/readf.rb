@@ -8,3 +8,10 @@ f2 = File.open("fib.rb", "r") { |file|
     puts line
   end
 }
+
+File.open("fib.rb") do |file|
+  i = 0
+  file.each_line { |line| 
+    i += 1
+    puts "#{i} #{line}"}
+end
