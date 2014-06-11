@@ -7,3 +7,17 @@ def read_content(file)
     f.read
   end
 end
+
+def format_line(line)
+  line.split(";")
+end
+
+def format_cvs(content)
+  lines = content.split("\n")
+  lines.each do |line|
+    puts line
+  end
+end
+
+
+

@@ -10,4 +10,8 @@ class TestCvs < Test::Unit::TestCase
   def test_read_content
     assert_equal "hello, world\n", read_content("./testdata/hello.tt")
   end
+
+  def test_format_line
+    assert_equal %w(A B C D E F G H), format_line("A;B;C;D;E;F;G;H")
+  end
 end
