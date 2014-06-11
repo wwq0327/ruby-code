@@ -14,10 +14,14 @@ end
 
 def format_cvs(content)
   lines = content.split("\n")
-  lines.each do |line|
-    puts line
-  end
 end
 
+def get_header(cvs)
+  cvs[0]
+end
+
+def get_content(cvs)
+  cvs[1..(a.length-1)]
+end
 
 
