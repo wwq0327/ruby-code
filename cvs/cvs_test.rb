@@ -14,4 +14,11 @@ class TestCvs < Test::Unit::TestCase
   def test_format_line
     assert_equal %w(A B C D E F G H), format_line("A;B;C;D;E;F;G;H")
   end
+
+  def test_get_header
+    file = read_content("./test.csv")
+    lines = format_cvs(file)
+    assert_equal "A;B;C;D;E;F;G;H", get_header(lines)
+  end
+
 end
